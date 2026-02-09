@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:3001";
+import { BASE_URL } from "../consts/api.const";
 
 export const apiFetch = async <T>(endpoint: string): Promise<T> => {
   const res = await fetch(`${BASE_URL}${endpoint}`);

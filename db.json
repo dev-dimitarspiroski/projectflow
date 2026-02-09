@@ -1,22 +1,116 @@
 {
   "users": [
     {
-      "id": 1,
+      "id": "1",
       "email": "admin@projectflow.dev",
       "password": "123456"
     }
   ],
   "projects": [
-    { "id": 1, "name": "React Migration" },
-    { "id": 2, "name": "Angular Cleanup" }
+    {
+      "id": "1",
+      "name": "React Migration"
+    },
+    {
+      "id": "2",
+      "name": "Angular Cleanup"
+    }
   ],
   "tasks": [
-    { "id": 1, "projectId": 1, "title": "Setup Vite", "completed": true },
-    { "id": 2, "projectId": 1, "title": "Auth Context", "completed": false },
     {
-      "id": 3,
+      "id": "1",
+      "projectId": 1,
+      "title": "Setup Vite",
+      "completed": true
+    },
+    {
+      "id": "2",
+      "projectId": 1,
+      "title": "Auth Context",
+      "completed": false
+    },
+    {
+      "id": "3",
       "projectId": 2,
       "title": "Remove legacy code",
+      "completed": false
+    },
+    {
+      "id": "014f",
+      "title": "Update local state to use signals",
+      "projectId": "2",
+      "completed": false
+    },
+    {
+      "id": "c8fa",
+      "title": "Test new task",
+      "projectId": "2",
+      "completed": false
+    },
+    {
+      "id": "e9c9",
+      "title": "Again a test",
+      "projectId": "2",
+      "completed": false
+    },
+    {
+      "id": "6657",
+      "title": "123",
+      "projectId": "2",
+      "completed": false
+    },
+    {
+      "id": "8ec3",
+      "title": "32",
+      "projectId": "2",
+      "completed": false
+    },
+    {
+      "id": "528c",
+      "title": "123123",
+      "projectId": "2",
+      "completed": false
+    },
+    {
+      "id": "3a5e",
+      "title": "222",
+      "projectId": "2",
+      "completed": false
+    },
+    {
+      "id": "119f",
+      "title": "23",
+      "projectId": "2",
+      "completed": false
+    },
+    {
+      "id": "3622",
+      "title": "123",
+      "projectId": "2",
+      "completed": false
+    },
+    {
+      "id": "6aee",
+      "title": "3",
+      "projectId": "2",
+      "completed": false
+    },
+    {
+      "id": "b9fa",
+      "title": "123123",
+      "projectId": "2",
+      "completed": false
+    },
+    {
+      "id": "c5b6",
+      "title": "New React task",
+      "projectId": "1",
+      "completed": false
+    },
+    {
+      "id": "987c",
+      "title": "new angular task",
+      "projectId": "2",
       "completed": false
     }
   ]

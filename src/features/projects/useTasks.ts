@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Task } from "../../types/api";
+import { Task } from "../../interfaces/api.interface";
 import { apiFetch } from "../../services/api";
 import { Endpoints } from "../../enums/endpoints.enum";
 
@@ -19,5 +19,5 @@ export const useTasks = (projectId: number | null) => {
       .finally(() => setIsLoading(false));
   }, [projectId]);
 
-  return { tasks, isLoading, error };
+  return { tasks, setTasks, isLoading, error };
 };

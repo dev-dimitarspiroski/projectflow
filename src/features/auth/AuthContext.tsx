@@ -6,6 +6,8 @@ import {
   ReactNode,
 } from "react";
 import { AuthContextValue, User } from "./auth.types";
+import { BASE_URL } from "../../consts/api.const";
+import { Endpoints } from "../../enums/endpoints.enum";
 
 interface Props {
   children: ReactNode;
@@ -33,7 +35,7 @@ export const AuthProvider = ({ children }: Props) => {
     setIsLoading(true);
 
     const res = await fetch(
-      `http://localhost:3001/users?email=${email}&password=${password}`,
+      `${BASE_URL}${Endpoints.users}?email=${email}&password=${password}`,
     );
 
     const users: User[] = await res.json();

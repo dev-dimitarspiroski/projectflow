@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Project } from "../../types/api";
+import { Project } from "../../interfaces/api.interface";
 import { apiFetch } from "../../services/api";
 import { Endpoints } from "../../enums/endpoints.enum";
 
