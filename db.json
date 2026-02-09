@@ -1,0 +1,23 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "email": "admin@projectflow.dev",
+      "password": "123456"
+    }
+  ],
+  "projects": [
+    { "id": 1, "name": "React Migration" },
+    { "id": 2, "name": "Angular Cleanup" }
+  ],
+  "tasks": [
+    { "id": 1, "projectId": 1, "title": "Setup Vite", "completed": true },
+    { "id": 2, "projectId": 1, "title": "Auth Context", "completed": false },
+    {
+      "id": 3,
+      "projectId": 2,
+      "title": "Remove legacy code",
+      "completed": false
+    }
+  ]
+}
