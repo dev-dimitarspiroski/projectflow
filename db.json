@@ -39,7 +39,7 @@
       "id": "014f",
       "title": "Update local state to use signals",
       "projectId": "2",
-      "completed": false
+      "completed": true
     },
     {
       "id": "d963",
@@ -58,6 +58,12 @@
       "title": "Switch to Standalone components",
       "projectId": "2",
       "completed": false
+    },
+    {
+      "id": "2dd5",
+      "title": "New Angular Task",
+      "projectId": "2",
+      "completed": true
     }
   ]
 }

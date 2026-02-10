@@ -1,6 +1,9 @@
-import { useState } from "react";
-import CreateTaskForm from "../features/tasks/CreateTaskForm";
+import { useCallback, useState } from "react";
+import CreateTaskForm from "../features/tasks/components/CreateTaskForm";
 import { useProjectsQuery, useTasksQuery } from "../features/projects/queries";
+import ProjectItem from "../features/projects/components/ProjectItem";
+import TaskItem from "../features/projects/components/TaskItem";
+import { useToggleTaskMutation } from "../features/tasks/task.mutations";
 
 const Projects = () => {
   const [selectedProjectId, setSelectedProjectId] = useState<number | null>(
@@ -10,6 +13,11 @@ const Projects = () => {
   const { data: projects, isLoading: projectsLoading } = useProjectsQuery();
   const { data: tasks, isLoading: tasksLoading } =
     useTasksQuery(selectedProjectId);
+  const { mutate: toggleTask } = useToggleTaskMutation();
+
+  const handleSelectProject = useCallback((id: number) => {
+    setSelectedProjectId(id);
+  }, []);
 
   if (projectsLoading) {
     return <p>Loading projects...</p>;
@@ -21,11 +29,11 @@ const Projects = () => {
         <h2>Projects</h2>
         <ul>
           {projects?.map((project) => (
-            <li key={project.id}>
-              <button onClick={() => setSelectedProjectId(project.id)}>
-                {project.name}
-              </button>
-            </li>
+            <ProjectItem
+              key={project.id}
+              project={project}
+              onSelect={handleSelectProject}
+            />
           ))}
         </ul>
       </aside>
@@ -35,10 +43,18 @@ const Projects = () => {
         {tasksLoading && <p>Loading tasks...</p>}
         <ul>
           {tasks?.map((task) => (
-            <li key={task.id}>
-              <input type="checkbox" checked={task.completed} readOnly />
-              <span>{task.title}</span>
-            </li>
+            <TaskItem
+              key={task.id}
+              task={task}
+              onSelect={(task) => {
+                return toggleTask({
+                  id: task.id,
+                  projectId: selectedProjectId!,
+                  title: task.title,
+                  completed: !task.completed,
+                });
+              }}
+            />
           ))}
         </ul>
       </section>

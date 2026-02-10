@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-import { useCreateTaskMutation } from "./mutations";
+import { useCreateTaskMutation } from "../task.mutations";
 
 interface CreateTaskFormValues {
   title: string;
