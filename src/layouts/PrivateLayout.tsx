@@ -1,14 +1,14 @@
 import { Link, Outlet } from "react-router-dom";
-import { useAuth } from "../features/auth/AuthContext";
+import { useAuth } from "../hooks/useAuth";
 
 const PrivateLayout = () => {
-  const { logout, user } = useAuth();
+  const { logout, state } = useAuth();
 
   return (
     <div>
       <header>
         <nav>
-          <span>Welcome {user?.email}</span> {" | "}
+          <span>Welcome {state.user?.email}</span> {" | "}
           <Link to="/">Dashboard</Link>
           {" | "}
           <Link to="/projects">Projects</Link> {" | "}

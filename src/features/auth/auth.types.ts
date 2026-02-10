@@ -3,12 +3,19 @@ export interface User {
   email: string;
 }
 
+export interface UserLogin {
+  email: string;
+  password: string;
+}
+
 export interface AuthState {
   user: User | null;
   isLoading: boolean;
+  isAuthenticated: boolean;
 }
 
-export interface AuthContextValue extends AuthState {
-  login: (email: string, password: string) => Promise<void>;
+export interface AuthContextValue {
+  state: AuthState;
+  login: (credentials: UserLogin) => void;
   logout: () => void;
 }

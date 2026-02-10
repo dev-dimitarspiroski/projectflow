@@ -1,77 +1,36 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  ReactNode,
-} from "react";
-import { AuthContextValue, User } from "./auth.types";
-import { BASE_URL } from "../../consts/api.const";
-import { Endpoints } from "../../enums/endpoints.enum";
+import { ReactNode, useReducer } from "react";
+import { UserLogin } from "./auth.types";
+import { AuthContext } from "./authContext";
+import { authInitialState, authReducer } from "./auth.reducer";
+import { AuthActionTypes } from "../../enums/actions.enum";
+import { apiLogin } from "./auth.service";
 
 interface Props {
   children: ReactNode;
 }
 
-const AUTH_STORAGE_KEY = "projectflow_user";
-
-const AuthContext = createContext<AuthContextValue | undefined>(undefined);
-
 export const AuthProvider = ({ children }: Props) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [state, dispatch] = useReducer(authReducer, authInitialState);
 
-  useEffect(() => {
-    const storedUser = localStorage.getItem(AUTH_STORAGE_KEY);
+  const login = async (credentials: UserLogin) => {
+    const user = await apiLogin({
+      email: credentials.email,
+      password: credentials.password,
+    });
 
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-
-    setIsLoading(false);
-  }, []);
-
-  const login = async (email: string, password: string) => {
-    setIsLoading(true);
-
-    const res = await fetch(
-      `${BASE_URL}${Endpoints.users}?email=${email}&password=${password}`,
-    );
-
-    const users: User[] = await res.json();
-
-    if (!users.length) {
-      setIsLoading(false);
-      throw new Error("Invalid credentials");
-    }
-
-    const loggedInUser = users[0];
-    setUser(loggedInUser);
-    localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(loggedInUser));
-    setIsLoading(false);
+    dispatch({
+      type: AuthActionTypes.login,
+      payload: user,
+    });
   };
 
   const logout = () => {
-    setUser(null);
-    localStorage.removeItem(AUTH_STORAGE_KEY);
+    dispatch({ type: AuthActionTypes.logout });
   };
 
-  const value: AuthContextValue = {
-    user,
-    isLoading,
-    login,
-    logout,
-  };
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-};
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-
-  if (!context) {
-    throw new Error("useAuth must be used inside AuthProvider");
-  }
-
-  return context;
+  return (
+    <AuthContext.Provider value={{ state, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };

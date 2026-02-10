@@ -1,10 +1,10 @@
 import { useRef, useState, SubmitEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../features/auth/AuthContext";
+import { useAuth } from "../hooks/useAuth";
 
 const Login = () => {
-  const emailRef = useRef<HTMLInputElement>(null); // uncontrolled
-  const [password, setPassword] = useState(""); // controlled
+  const emailRef = useRef<HTMLInputElement>(null);
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const { login } = useAuth();
@@ -18,10 +18,11 @@ const Login = () => {
     const email = emailRef.current?.value || "";
 
     try {
-      await login(email, password);
+      await login({ email, password });
       navigate("/");
     } catch (err) {
       setError("Invalid email or password.");
+      console.error(err);
     }
   };
 
