@@ -1,8 +1,6 @@
 import { useForm } from "react-hook-form";
-import { Endpoints } from "../../enums/endpoints.enum";
-import { BASE_URL } from "../../consts/api.const";
 import { useState } from "react";
-import { Task } from "../../interfaces/api.interface";
+import { useCreateTaskMutation } from "./mutations";
 
 interface CreateTaskFormValues {
   title: string;
@@ -10,10 +8,9 @@ interface CreateTaskFormValues {
 
 interface Props {
   projectId: number;
-  onCreated: (createdTask: Task) => void;
 }
 
-const CreateTaskForm = ({ projectId, onCreated }: Props) => {
+const CreateTaskForm = ({ projectId }: Props) => {
   const {
     register,
     handleSubmit,
@@ -21,22 +18,16 @@ const CreateTaskForm = ({ projectId, onCreated }: Props) => {
     formState: { errors },
   } = useForm<CreateTaskFormValues>();
   const [error, setError] = useState<string | null>(null);
+  const createTask = useCreateTaskMutation();
 
   const onSubmitForm = async (data: CreateTaskFormValues) => {
-    const createdTask = await fetch(`${BASE_URL}${Endpoints.tasks}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        title: data.title,
-        projectId,
-        completed: false,
-      }),
-    })
-      .then((res) => res.json())
-      .catch((err) => setError("Failed to create task."));
-
-    reset();
-    onCreated(createdTask);
+    createTask.mutate(
+      { title: data.title, projectId },
+      {
+        onSuccess: () => reset(),
+        onError: () => setError("Failed to create task."),
+      },
+    );
   };
 
   return (
@@ -47,7 +38,10 @@ const CreateTaskForm = ({ projectId, onCreated }: Props) => {
       />
       {errors.title && <p>{errors.title.message}</p>}
 
-      <button type="submit">Add Task</button>
+      <button type="submit" disabled={createTask.isPending}>
+        Add Task
+      </button>
+      {error && <p>{error}</p>}
     </form>
   );
 };

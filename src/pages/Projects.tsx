@@ -1,18 +1,15 @@
 import { useState } from "react";
-import { useProjects } from "../features/projects/useProjects";
-import { useTasks } from "../features/projects/useTasks";
 import CreateTaskForm from "../features/tasks/CreateTaskForm";
+import { useProjectsQuery, useTasksQuery } from "../features/projects/queries";
 
 const Projects = () => {
-  const { projects, isLoading: projectsLoading } = useProjects();
   const [selectedProjectId, setSelectedProjectId] = useState<number | null>(
     null,
   );
-  const {
-    tasks,
-    setTasks,
-    isLoading: tasksLoading,
-  } = useTasks(selectedProjectId);
+
+  const { data: projects, isLoading: projectsLoading } = useProjectsQuery();
+  const { data: tasks, isLoading: tasksLoading } =
+    useTasksQuery(selectedProjectId);
 
   if (projectsLoading) {
     return <p>Loading projects...</p>;
@@ -23,7 +20,7 @@ const Projects = () => {
       <aside>
         <h2>Projects</h2>
         <ul>
-          {projects.map((project) => (
+          {projects?.map((project) => (
             <li key={project.id}>
               <button onClick={() => setSelectedProjectId(project.id)}>
                 {project.name}
@@ -37,7 +34,7 @@ const Projects = () => {
         <h2>Tasks</h2>
         {tasksLoading && <p>Loading tasks...</p>}
         <ul>
-          {tasks.map((task) => (
+          {tasks?.map((task) => (
             <li key={task.id}>
               <input type="checkbox" checked={task.completed} readOnly />
               <span>{task.title}</span>
@@ -49,12 +46,7 @@ const Projects = () => {
       {selectedProjectId && (
         <section>
           <h2>Create a Task</h2>
-          <CreateTaskForm
-            projectId={selectedProjectId}
-            onCreated={(createdTask) => {
-              setTasks([...tasks, createdTask]);
-            }}
-          ></CreateTaskForm>
+          <CreateTaskForm projectId={selectedProjectId}></CreateTaskForm>
         </section>
       )}
     </div>
