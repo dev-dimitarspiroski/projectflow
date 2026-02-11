@@ -1,7 +1,8 @@
 import { useRef, useState, SubmitEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
-import btn from "../styles/button.module.css";
+import { useAuth } from "../../hooks/useAuth";
+import Button from "../../components/ui/Button/Button";
+import Input from "../../components/ui/Input/Input";
 
 const Login = () => {
   const emailRef = useRef<HTMLInputElement>(null);
@@ -31,8 +32,8 @@ const Login = () => {
     <form onSubmit={handleSubmit}>
       <h1>Login</h1>
 
-      <input ref={emailRef} type="email" placeholder="Email" required />
-      <input
+      <Input ref={emailRef} type="email" placeholder="Email" required />
+      <Input
         type="password"
         placeholder="Password"
         required
@@ -42,9 +43,9 @@ const Login = () => {
 
       {error && <p>{error}</p>}
 
-      <button className={`${btn.btn} ${btn.primary}`} type="submit">
+      <Button variant="primary" type="submit">
         Login
-      </button>
+      </Button>
     </form>
   );
 };

@@ -1,13 +1,16 @@
 import { useCallback, useState } from "react";
-import CreateTaskForm from "../features/tasks/components/CreateTaskForm";
-import { useProjectsQuery, useTasksQuery } from "../features/projects/queries";
-import ProjectItem from "../features/projects/components/ProjectItem";
-import TaskItem from "../features/projects/components/TaskItem";
-import { useToggleTaskMutation } from "../features/tasks/task.mutations";
-import Modal from "../components/ui/Modal";
-import { Task } from "../interfaces/api.interface";
-import EditTaskForm from "../features/tasks/components/EditTaskForm";
-import btn from "../styles/button.module.css";
+import {
+  useProjectsQuery,
+  useTasksQuery,
+} from "../../features/projects/queries";
+import ProjectItem from "../../features/projects/components/ProjectItem/ProjectItem";
+import { useToggleTaskMutation } from "../../features/tasks/task.mutations";
+import Modal from "../../components/ui/Modal/Modal";
+import { Task } from "../../interfaces/api.interface";
+import EditTaskForm from "../../features/tasks/components/EditTaskForm/EditTaskForm";
+import TaskItem from "../../features/tasks/components/TaskItem/TaskItem";
+import CreateTaskForm from "../../features/tasks/components/CreateTaskForm/CreateTaskForm";
+import Button from "../../components/ui/Button/Button";
 
 const Projects = () => {
   const [selectedProjectId, setSelectedProjectId] = useState<number | null>(
@@ -74,13 +77,13 @@ const Projects = () => {
 
       {selectedProjectId && (
         <>
-          <button
-            className={`${btn.btn} ${btn.primary}`}
+          <Button
+            variant="primary"
             type="button"
             onClick={() => setIsCreateOpen(true)}
           >
             + Add Task
-          </button>
+          </Button>
 
           <Modal
             title="Create task"

@@ -1,9 +1,9 @@
 import { ReactNode, useReducer } from "react";
-import { UserLogin } from "./auth.types";
-import { AuthContext } from "./authContext";
-import { authInitialState, authReducer } from "./auth.reducer";
-import { AuthActionTypes } from "../../enums/actions.enum";
-import { apiLogin } from "./auth.service";
+import { UserLogin } from "../auth.types";
+import { AuthContext } from "../authContext";
+import { authInitialState, authReducer } from "../auth.reducer";
+import { AuthActionTypes } from "../../../enums/actions.enum";
+import { apiLogin } from "../auth.service";
 
 interface Props {
   children: ReactNode;

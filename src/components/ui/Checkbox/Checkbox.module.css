@@ -1,0 +1,22 @@
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: var(--space-3);
+}
+
+.box {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--primary);
+}
+
+.labelText {
+  color: var(--text);
+}
+
+.error {
+  color: var(--danger);
+  font-size: 13px;
+  margin: 4px 0 0 28px;
+}

@@ -1,10 +1,12 @@
-import { useForm } from "react-hook-form";
-import { Task } from "../../../interfaces/api.interface";
-import { useEffect } from "react";
-import { useUpdateTaskMutation } from "../task.mutations";
-import btn from "../../../styles/button.module.css";
 import styles from "./EditTaskForm.module.css";
-import formStyles from "../../../styles/form.module.css";
+import formStyles from "../../../../styles/form.module.css";
+import Button from "../../../../components/ui/Button/Button";
+import { useForm } from "react-hook-form";
+import { Task } from "../../../../interfaces/api.interface";
+import { useEffect } from "react";
+import { useUpdateTaskMutation } from "../../task.mutations";
+import Input from "../../../../components/ui/Input/Input";
+import Checkbox from "../../../../components/ui/Checkbox/Checkbox";
 
 type FormValues = {
   title: string;
@@ -53,20 +55,18 @@ const EditTaskForm = ({ task, selectedProjectId, onSuccess }: Props) => {
   return (
     <form onSubmit={handleSubmit(onSubmitForm)}>
       <div className={formStyles.formGroup}>
-        <label className={formStyles.label}>Title</label>
-        <input
+        <Input
           {...register("title", { required: "Title is required" })}
+          label="Title"
           placeholder="Task title"
           autoFocus
           className={formStyles.input}
+          error={errors.title?.message}
         />
-        {errors.title && (
-          <p className={formStyles.error}>{errors.title.message}</p>
-        )}
       </div>
       <div className={`${formStyles.formGroup} ${formStyles.checkboxGroup}`}>
-        <label className={formStyles.label}>Completed</label>
-        <input
+        <Checkbox
+          label="Completed"
           className={formStyles.input}
           type="checkbox"
           {...register("completed")}
@@ -78,22 +78,19 @@ const EditTaskForm = ({ task, selectedProjectId, onSuccess }: Props) => {
       </div>
 
       <div className={styles.buttonContainer}>
-        <button
-          className={`${btn.btn} ${btn.primary}`}
-          type="submit"
-          disabled={updateTask.isPending}
-        >
+        <Button variant="primary" type="submit" disabled={updateTask.isPending}>
           {updateTask.isPending ? "Saving..." : "Save"}
-        </button>
+        </Button>
 
-        <button
-          className={`${btn.btn} ${btn.ghost}`}
+        <Button
+          variant="ghost"
           type="button"
           onClick={onSuccess}
+          isLoading={updateTask.isPending}
           disabled={updateTask.isPending}
         >
           Cancel
-        </button>
+        </Button>
       </div>
     </form>
   );

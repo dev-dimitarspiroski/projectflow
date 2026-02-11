@@ -1,6 +1,6 @@
 import React from "react";
-import btn from "../../../styles/button.module.css";
-import { Task } from "../../../interfaces/api.interface";
+import Button from "../../../../components/ui/Button/Button";
+import { Task } from "../../../../interfaces/api.interface";
 
 interface Props {
   task: Task;
@@ -17,13 +17,9 @@ const TaskItem = React.memo(({ task, onSelect, onEdit }: Props) => {
         onChange={() => onSelect(task)}
       />
       <span>{task.title}</span>
-      <button
-        className={`${btn.btn} ${btn.ghost}`}
-        type="button"
-        onClick={() => onEdit(task)}
-      >
+      <Button variant="ghost" type="button" onClick={() => onEdit(task)}>
         Edit
-      </button>
+      </Button>
     </li>
   );
 });

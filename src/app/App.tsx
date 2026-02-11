@@ -1,11 +1,11 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import Login from "../pages/Login";
-import Register from "../pages/Register";
-import Dashboard from "../pages/Dashboard";
-import ProtectedRoute from "../components/ProtectedRoute";
+import Register from "../pages/Register/Register";
+import Dashboard from "../pages/Dashboard/Dashboard";
+import ProtectedRoute from "../features/auth/ProtectedRoute/ProtectedRoute";
 import PublicLayout from "../layouts/PublicLayout";
 import PrivateLayout from "../layouts/PrivateLayout";
-import Projects from "../pages/Projects";
+import Projects from "../pages/Projects/Projects";
+import Login from "../pages/Login/Login";
 
 export default function App() {
   return (

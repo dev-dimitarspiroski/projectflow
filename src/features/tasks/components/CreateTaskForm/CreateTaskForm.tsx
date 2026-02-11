@@ -1,7 +1,8 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-import { useCreateTaskMutation } from "../task.mutations";
-import btn from "../../../styles/button.module.css";
+import { useCreateTaskMutation } from "../../task.mutations";
+import Button from "../../../../components/ui/Button/Button";
+import Input from "../../../../components/ui/Input/Input";
 
 interface CreateTaskFormValues {
   title: string;
@@ -40,19 +41,20 @@ const CreateTaskForm = ({ projectId, onSuccess }: Props) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmitForm)}>
-      <input
-        {...register("title", { required: "Title is required" })}
+      <Input
         placeholder="New task"
+        {...register("title", { required: "Title is required" })}
+        error={errors.title?.message}
       />
-      {errors.title && <p>{errors.title.message}</p>}
 
-      <button
-        className={`${btn.btn} ${btn.primary}`}
+      <Button
+        variant="primary"
         type="submit"
+        isLoading={createTask.isPending}
         disabled={createTask.isPending}
       >
         Add
-      </button>
+      </Button>
       {error && <p>{error}</p>}
     </form>
   );

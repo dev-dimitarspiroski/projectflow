@@ -1,6 +1,7 @@
 import { ReactNode, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import styles from "./Modal.module.css";
+import Button from "../Button/Button";
 
 type Props = {
   title?: string;
@@ -55,14 +56,16 @@ const Modal = ({ title, isOpen, onClose, children }: Props) => {
         {title && (
           <div className={styles.header}>
             <h2 className={styles.title}>{title}</h2>
-            <button
+            <Button
+              variant="ghost"
+              size="sm"
               type="button"
               onClick={onClose}
               aria-label="Close dialog"
               className={styles.closeBtn}
             >
               ✕
-            </button>
+            </Button>
           </div>
         )}
 
