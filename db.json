@@ -64,6 +64,12 @@
       "title": "New Angular Task",
       "projectId": "2",
       "completed": true
+    },
+    {
+      "id": "72ca",
+      "title": "New React Task",
+      "projectId": "1",
+      "completed": false
     }
   ]
 }

@@ -4,11 +4,18 @@ import { useProjectsQuery, useTasksQuery } from "../features/projects/queries";
 import ProjectItem from "../features/projects/components/ProjectItem";
 import TaskItem from "../features/projects/components/TaskItem";
 import { useToggleTaskMutation } from "../features/tasks/task.mutations";
+import Modal from "../components/ui/Modal";
+import { Task } from "../interfaces/api.interface";
+import EditTaskForm from "../features/tasks/components/EditTaskForm";
+import btn from "../styles/button.module.css";
 
 const Projects = () => {
   const [selectedProjectId, setSelectedProjectId] = useState<number | null>(
     null,
   );
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [taskToEdit, setTaskToEdit] = useState<Task | null>(null);
 
   const { data: projects, isLoading: projectsLoading } = useProjectsQuery();
   const { data: tasks, isLoading: tasksLoading } =
@@ -17,6 +24,11 @@ const Projects = () => {
 
   const handleSelectProject = useCallback((id: number) => {
     setSelectedProjectId(id);
+  }, []);
+
+  const handleEditTask = useCallback((task: Task) => {
+    setTaskToEdit(task);
+    setIsEditOpen(true);
   }, []);
 
   if (projectsLoading) {
@@ -46,6 +58,7 @@ const Projects = () => {
             <TaskItem
               key={task.id}
               task={task}
+              onEdit={(task) => handleEditTask(task)}
               onSelect={(task) => {
                 return toggleTask({
                   id: task.id,
@@ -60,10 +73,42 @@ const Projects = () => {
       </section>
 
       {selectedProjectId && (
-        <section>
-          <h2>Create a Task</h2>
-          <CreateTaskForm projectId={selectedProjectId}></CreateTaskForm>
-        </section>
+        <>
+          <button
+            className={`${btn.btn} ${btn.primary}`}
+            type="button"
+            onClick={() => setIsCreateOpen(true)}
+          >
+            + Add Task
+          </button>
+
+          <Modal
+            title="Create task"
+            isOpen={isCreateOpen || isEditOpen}
+            onClose={() => {
+              setTaskToEdit(null);
+              setIsCreateOpen(false);
+              setIsEditOpen(false);
+            }}
+          >
+            {isCreateOpen && (
+              <CreateTaskForm
+                projectId={selectedProjectId}
+                onSuccess={() => setIsCreateOpen(false)}
+              />
+            )}
+            {isEditOpen && (
+              <EditTaskForm
+                task={taskToEdit!}
+                selectedProjectId={selectedProjectId}
+                onSuccess={() => {
+                  setIsEditOpen(false);
+                  setTaskToEdit(null);
+                }}
+              />
+            )}
+          </Modal>
+        </>
       )}
     </div>
   );

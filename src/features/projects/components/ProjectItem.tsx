@@ -1,4 +1,5 @@
 import React from "react";
+import btn from "../../../styles/button.module.css";
 import { Project } from "../../../interfaces/api.interface";
 
 interface Props {
@@ -9,7 +10,12 @@ interface Props {
 const ProjectItem = React.memo(({ project, onSelect }: Props) => {
   return (
     <li>
-      <button onClick={() => onSelect(project.id)}>{project.name}</button>
+      <button
+        className={`${btn.btn} ${btn.primary}`}
+        onClick={() => onSelect(project.id)}
+      >
+        {project.name}
+      </button>
     </li>
   );
 });

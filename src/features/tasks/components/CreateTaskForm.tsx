@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { useCreateTaskMutation } from "../task.mutations";
+import btn from "../../../styles/button.module.css";
 
 interface CreateTaskFormValues {
   title: string;
@@ -8,9 +9,10 @@ interface CreateTaskFormValues {
 
 interface Props {
   projectId: number;
+  onSuccess?: () => void;
 }
 
-const CreateTaskForm = ({ projectId }: Props) => {
+const CreateTaskForm = ({ projectId, onSuccess }: Props) => {
   const {
     register,
     handleSubmit,
@@ -24,7 +26,13 @@ const CreateTaskForm = ({ projectId }: Props) => {
     createTask.mutate(
       { title: data.title, projectId },
       {
-        onSuccess: () => reset(),
+        onSuccess: () => {
+          reset();
+
+          if (onSuccess) {
+            onSuccess();
+          }
+        },
         onError: () => setError("Failed to create task."),
       },
     );
@@ -38,8 +46,12 @@ const CreateTaskForm = ({ projectId }: Props) => {
       />
       {errors.title && <p>{errors.title.message}</p>}
 
-      <button type="submit" disabled={createTask.isPending}>
-        Add Task
+      <button
+        className={`${btn.btn} ${btn.primary}`}
+        type="submit"
+        disabled={createTask.isPending}
+      >
+        Add
       </button>
       {error && <p>{error}</p>}
     </form>

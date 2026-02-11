@@ -1,6 +1,7 @@
 import { useRef, useState, SubmitEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
+import btn from "../styles/button.module.css";
 
 const Login = () => {
   const emailRef = useRef<HTMLInputElement>(null);
@@ -41,7 +42,9 @@ const Login = () => {
 
       {error && <p>{error}</p>}
 
-      <button type="submit">Login</button>
+      <button className={`${btn.btn} ${btn.primary}`} type="submit">
+        Login
+      </button>
     </form>
   );
 };

@@ -1,5 +1,6 @@
 import { Link, Outlet } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
+import btn from "../styles/button.module.css";
 
 const PrivateLayout = () => {
   const { logout, state } = useAuth();
@@ -12,7 +13,9 @@ const PrivateLayout = () => {
           <Link to="/">Dashboard</Link>
           {" | "}
           <Link to="/projects">Projects</Link> {" | "}
-          <button onClick={logout}>Logout</button>
+          <button className={`${btn.btn} ${btn.ghost}`} onClick={logout}>
+            Logout
+          </button>
         </nav>
       </header>
 
