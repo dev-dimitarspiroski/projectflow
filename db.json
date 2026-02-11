@@ -21,55 +21,25 @@
       "id": "1",
       "projectId": 1,
       "title": "Setup Vite",
-      "completed": true
+      "status": "done"
     },
     {
       "id": "2",
       "projectId": 1,
       "title": "Auth Context",
-      "completed": false
+      "status": "done"
     },
     {
       "id": "3",
       "projectId": 2,
       "title": "Remove legacy code",
-      "completed": false
+      "status": "done"
     },
     {
-      "id": "014f",
-      "title": "Update local state to use signals",
-      "projectId": "2",
-      "completed": true
-    },
-    {
-      "id": "d963",
-      "title": "TanStack Query implementation",
+      "id": "3191",
+      "title": "Status implementation",
       "projectId": "1",
-      "completed": false
-    },
-    {
-      "id": "ad24",
-      "title": "Forms",
-      "projectId": "1",
-      "completed": false
-    },
-    {
-      "id": "5f54",
-      "title": "Switch to Standalone components",
-      "projectId": "2",
-      "completed": false
-    },
-    {
-      "id": "2dd5",
-      "title": "New Angular Task",
-      "projectId": "2",
-      "completed": true
-    },
-    {
-      "id": "72ca",
-      "title": "New React Task",
-      "projectId": "1",
-      "completed": false
+      "status": "done"
     }
   ]
 }

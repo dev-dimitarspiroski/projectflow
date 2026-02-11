@@ -1,0 +1,33 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.todo {
+  background: var(--surface-2);
+  color: var(--muted);
+}
+
+.inProgress {
+  background: var(--primary-soft);
+  color: var(--primary);
+  border-color: color-mix(in srgb, var(--border) 60%, var(--primary) 40%);
+}
+
+.done {
+  background: rgba(34, 160, 107, 0.14);
+  color: var(--success);
+  border-color: rgba(34, 160, 107, 0.35);
+}
+
+.default {
+  background: var(--surface-2);
+}

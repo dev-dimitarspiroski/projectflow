@@ -1,13 +1,10 @@
-import { Outlet, Link } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import Navbar from "../components/ui/Navbar/Navbar";
 
 const PublicLayout = () => {
   return (
     <div>
-      <header>
-        <nav>
-          <Link to="/login">Login</Link> | <Link to="/register">Register</Link>
-        </nav>
-      </header>
+      <Navbar mode="public" />
 
       <main>
         <Outlet />

@@ -6,11 +6,13 @@ import { Task } from "../../../../interfaces/api.interface";
 import { useEffect } from "react";
 import { useUpdateTaskMutation } from "../../task.mutations";
 import Input from "../../../../components/ui/Input/Input";
-import Checkbox from "../../../../components/ui/Checkbox/Checkbox";
+import { TaskStatus } from "../../task.types";
+import Select from "../../../../components/ui/Select/Select";
+import { STATUS_OPTIONS } from "../../../../consts/status.const";
 
 type FormValues = {
   title: string;
-  completed: boolean;
+  status: TaskStatus;
 };
 
 type Props = {
@@ -28,13 +30,16 @@ const EditTaskForm = ({ task, selectedProjectId, onSuccess }: Props) => {
   } = useForm<FormValues>({
     defaultValues: {
       title: task.title,
-      completed: task.completed,
+      status: task.status ?? "todo",
     },
   });
 
   useEffect(() => {
-    reset({ title: task.title, completed: task.completed });
-  }, [task.id, task.title, task.completed, reset]);
+    reset({
+      title: task.title,
+      status: task.status ?? "todo",
+    });
+  }, [task.id, task.title, task.status, reset]);
 
   const updateTask = useUpdateTaskMutation();
 
@@ -44,7 +49,7 @@ const EditTaskForm = ({ task, selectedProjectId, onSuccess }: Props) => {
         id: task.id,
         projectId: selectedProjectId,
         title: data.title,
-        completed: data.completed,
+        status: data.status,
       },
       {
         onSuccess: () => onSuccess(),
@@ -64,17 +69,12 @@ const EditTaskForm = ({ task, selectedProjectId, onSuccess }: Props) => {
           error={errors.title?.message}
         />
       </div>
-      <div className={`${formStyles.formGroup} ${formStyles.checkboxGroup}`}>
-        <Checkbox
-          label="Completed"
-          className={formStyles.input}
-          type="checkbox"
-          {...register("completed")}
+      <div className={`${formStyles.formGroup} ${formStyles.formGroup}`}>
+        <Select
+          label="Status"
+          options={[...STATUS_OPTIONS]}
+          {...register("status")}
         />
-
-        {updateTask.isError && (
-          <p className={formStyles.error}>Failed to update task.</p>
-        )}
       </div>
 
       <div className={styles.buttonContainer}>

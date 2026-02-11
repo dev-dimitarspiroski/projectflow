@@ -11,6 +11,7 @@ import EditTaskForm from "../../features/tasks/components/EditTaskForm/EditTaskF
 import TaskItem from "../../features/tasks/components/TaskItem/TaskItem";
 import CreateTaskForm from "../../features/tasks/components/CreateTaskForm/CreateTaskForm";
 import Button from "../../components/ui/Button/Button";
+import styles from "./Projects.module.css"; // ✅ add this
 
 const Projects = () => {
   const [selectedProjectId, setSelectedProjectId] = useState<number | null>(
@@ -34,85 +35,108 @@ const Projects = () => {
     setIsEditOpen(true);
   }, []);
 
-  if (projectsLoading) {
-    return <p>Loading projects...</p>;
-  }
+  const closeModal = useCallback(() => {
+    setTaskToEdit(null);
+    setIsCreateOpen(false);
+    setIsEditOpen(false);
+  }, []);
+
+  if (projectsLoading) return <p>Loading projects...</p>;
 
   return (
-    <div style={{ display: "flex", gap: "2rem" }}>
-      <aside>
-        <h2>Projects</h2>
-        <ul>
-          {projects?.map((project) => (
-            <ProjectItem
-              key={project.id}
-              project={project}
-              onSelect={handleSelectProject}
-            />
-          ))}
-        </ul>
+    <div className={styles.page}>
+      <aside className={styles.panel}>
+        <div className={styles.panelHeader}>
+          <h2 className={styles.panelTitle}>Projects</h2>
+        </div>
+
+        <div className={styles.panelBody}>
+          <ul className={styles.list}>
+            {projects?.map((project) => (
+              <ProjectItem
+                key={project.id}
+                project={project}
+                onSelect={handleSelectProject}
+              />
+            ))}
+          </ul>
+        </div>
       </aside>
 
-      <section>
-        <h2>Tasks</h2>
-        {tasksLoading && <p>Loading tasks...</p>}
-        <ul>
-          {tasks?.map((task) => (
-            <TaskItem
-              key={task.id}
-              task={task}
-              onEdit={(task) => handleEditTask(task)}
-              onSelect={(task) => {
-                return toggleTask({
-                  id: task.id,
-                  projectId: selectedProjectId!,
-                  title: task.title,
-                  completed: !task.completed,
-                });
-              }}
-            />
-          ))}
-        </ul>
+      <section className={styles.panel}>
+        <div className={styles.panelHeader}>
+          <div className={styles.rightTopRow}>
+            <h2 className={styles.panelTitle}>Tasks</h2>
+
+            {selectedProjectId && (
+              <Button
+                variant="primary"
+                type="button"
+                size="sm"
+                onClick={() => setIsCreateOpen(true)}
+              >
+                + Add Task
+              </Button>
+            )}
+          </div>
+        </div>
+
+        <div className={styles.panelBody}>
+          {!selectedProjectId && (
+            <div className={styles.empty}>
+              Select a project on the left to view tasks.
+            </div>
+          )}
+
+          {selectedProjectId && (
+            <>
+              {tasksLoading && <p className={styles.meta}>Loading tasks...</p>}
+
+              <ul className={styles.list}>
+                {tasks?.map((task) => (
+                  <TaskItem
+                    key={task.id}
+                    task={task}
+                    selectedProjectId={selectedProjectId}
+                    onEdit={() => handleEditTask(task)}
+                    onSelect={() =>
+                      toggleTask({
+                        id: task.id,
+                        projectId: selectedProjectId,
+                        status: task.status,
+                      })
+                    }
+                  />
+                ))}
+              </ul>
+            </>
+          )}
+        </div>
       </section>
 
-      {selectedProjectId && (
-        <>
-          <Button
-            variant="primary"
-            type="button"
-            onClick={() => setIsCreateOpen(true)}
-          >
-            + Add Task
-          </Button>
+      <Modal
+        title={isEditOpen ? "Edit task" : "Create task"}
+        isOpen={isCreateOpen || isEditOpen}
+        onClose={closeModal}
+      >
+        {isCreateOpen && selectedProjectId && (
+          <CreateTaskForm
+            projectId={selectedProjectId}
+            onSuccess={() => setIsCreateOpen(false)}
+          />
+        )}
 
-          <Modal
-            title="Create task"
-            isOpen={isCreateOpen || isEditOpen}
-            onClose={() => {
-              setTaskToEdit(null);
-              setIsCreateOpen(false);
+        {isEditOpen && taskToEdit && selectedProjectId && (
+          <EditTaskForm
+            task={taskToEdit}
+            selectedProjectId={selectedProjectId}
+            onSuccess={() => {
               setIsEditOpen(false);
+              setTaskToEdit(null);
             }}
-          >
-            {isCreateOpen && (
-              <CreateTaskForm
-                projectId={selectedProjectId}
-                onSuccess={() => setIsCreateOpen(false)}
-              />
-            )}
-            {isEditOpen && (
-              <EditTaskForm
-                task={taskToEdit!}
-                selectedProjectId={selectedProjectId}
-                onSuccess={() => {
-                  setIsEditOpen(false);
-                  setTaskToEdit(null);
-                }}
-              />
-            )}
-          </Modal>
-        </>
-      )}
+          />
+        )}
+      </Modal>
     </div>
   );
 };

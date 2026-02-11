@@ -1,0 +1,75 @@
+.wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface-2);
+  color: var(--text);
+
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+
+  padding: 7px 30px 7px 10px;
+  cursor: pointer;
+
+  box-shadow: none;
+  transition:
+    border-color 120ms ease,
+    background-color 120ms ease,
+    color 120ms ease;
+}
+
+.select:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.select:hover {
+  border-color: color-mix(in srgb, var(--border) 70%, var(--primary) 30%);
+}
+
+.select:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.chevron {
+  position: absolute;
+  right: 10px;
+  pointer-events: none;
+  font-size: 12px;
+  line-height: 1;
+  opacity: 0.75;
+  color: var(--text);
+}
+
+.todo {
+  background: var(--surface-2);
+  color: var(--muted);
+}
+
+.inProgress {
+  background: var(--primary-soft);
+  color: var(--primary);
+  border-color: color-mix(in srgb, var(--border) 60%, var(--primary) 40%);
+}
+
+.done {
+  background: rgba(34, 160, 107, 0.14);
+  color: var(--success);
+  border-color: rgba(34, 160, 107, 0.35);
+}
+
+.select option {
+  background: var(--surface);
+  color: var(--text);
+}

@@ -1,18 +1,23 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { BASE_URL } from "../../consts/api.const";
 import { Endpoints } from "../../enums/endpoints.enum";
+import { TaskStatus } from "./task.types";
 
 export const useCreateTaskMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (data: { title: string; projectId: number }) => {
+    mutationFn: async (data: {
+      title: string;
+      status: TaskStatus;
+      projectId: number;
+    }) => {
       return await fetch(`${BASE_URL}${Endpoints.tasks}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...data,
-          completed: false,
+          status: data.status ?? "todo",
         }),
       });
     },
@@ -32,14 +37,14 @@ export const useUpdateTaskMutation = () => {
       id: number;
       projectId: number;
       title: string;
-      completed: boolean;
+      status: TaskStatus;
     }) => {
       const res = await fetch(`${BASE_URL}/tasks/${data.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           title: data.title,
-          completed: data.completed,
+          status: data.status,
         }),
       });
 
@@ -62,14 +67,14 @@ export const useToggleTaskMutation = () => {
     mutationFn: async (data: {
       id: number;
       projectId: number;
-      title: string;
-      completed: boolean;
+
+      status: TaskStatus;
     }) => {
       const res = await fetch(`${BASE_URL}${Endpoints.tasks}/${data.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          completed: data.completed,
+          status: data.status,
         }),
       });
 

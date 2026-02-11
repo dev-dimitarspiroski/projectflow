@@ -1,22 +1,37 @@
 import React from "react";
 import Button from "../../../../components/ui/Button/Button";
 import { Task } from "../../../../interfaces/api.interface";
+import { TaskStatus } from "../../task.types";
+import StatusSelectBadge from "../../../../components/StatusSelectBadge/StatusSelectBadge";
+import { useUpdateTaskMutation } from "../../task.mutations";
 
 interface Props {
   task: Task;
+  selectedProjectId: number | null;
   onSelect: (task: Task) => void;
   onEdit: (task: Task) => void;
 }
 
-const TaskItem = React.memo(({ task, onSelect, onEdit }: Props) => {
+const TaskItem = React.memo(({ task, selectedProjectId, onEdit }: Props) => {
+  const updateTask = useUpdateTaskMutation();
+
+  const handleStatusChange = (task: Task, newStatus: TaskStatus) => {
+    updateTask.mutate({
+      id: task.id,
+      projectId: selectedProjectId!,
+      title: task.title,
+      status: newStatus,
+    });
+  };
+
   return (
     <li key={task.id}>
-      <input
-        type="checkbox"
-        checked={task.completed}
-        onChange={() => onSelect(task)}
-      />
       <span>{task.title}</span>
+      <StatusSelectBadge
+        value={task.status}
+        disabled={updateTask.isPending}
+        onChange={(newStatus) => handleStatusChange(task, newStatus)}
+      />
       <Button variant="ghost" type="button" onClick={() => onEdit(task)}>
         Edit
       </Button>
