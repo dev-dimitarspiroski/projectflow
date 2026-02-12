@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import {
   useProjectsQuery,
-  useTasksQuery,
+  useTasksPerProjectQuery,
 } from "../../features/projects/queries";
 import ProjectItem from "../../features/projects/components/ProjectItem/ProjectItem";
 import { useToggleTaskMutation } from "../../features/tasks/task.mutations";
@@ -23,7 +23,7 @@ const Projects = () => {
 
   const { data: projects, isLoading: projectsLoading } = useProjectsQuery();
   const { data: tasks, isLoading: tasksLoading } =
-    useTasksQuery(selectedProjectId);
+    useTasksPerProjectQuery(selectedProjectId);
   const { mutate: toggleTask } = useToggleTaskMutation();
 
   const handleSelectProject = useCallback((id: number) => {

@@ -55,7 +55,13 @@
     {
       "id": "e86a",
       "title": "Finish register page",
-      "status": "in_progress",
+      "status": "done",
+      "projectId": "1"
+    },
+    {
+      "id": "1470",
+      "title": "Create dashboard",
+      "status": "done",
       "projectId": "1"
     }
   ]

@@ -2,10 +2,11 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { useForm } from "react-hook-form";
+import { EMAIL_REGEX } from "../../consts/regex.const";
+import { useLoginMutation } from "../../features/auth/auth.mutations";
 import Button from "../../components/ui/Button/Button";
 import Input from "../../components/ui/Input/Input";
 import styles from "./Login.module.css";
-import { PASSWORD_REGEX } from "../../consts/regex.const";
 
 type LoginForm = {
   email: string;
@@ -15,6 +16,7 @@ type LoginForm = {
 const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
+  const loginMutation = useLoginMutation();
   const [serverError, setServerError] = useState<string | null>(null);
   const {
     register,
@@ -29,17 +31,18 @@ const Login = () => {
   });
 
   const onFormSubmit = async (data: LoginForm): Promise<void> => {
-    setServerError("");
+    setServerError(null);
 
-    try {
-      await login({ email: data.email, password: data.password });
-      navigate("/");
-    } catch (err) {
-      setServerError(
-        "Failed to login. Please check your credentials and try again.",
-      );
-      console.error(err);
-    }
+    loginMutation.mutate(data, {
+      onSuccess: (user) => {
+        login({ email: user.email, password: user.password });
+        navigate("/dashboard");
+      },
+      onError: (error) =>
+        error instanceof Error
+          ? setServerError(error.message)
+          : setServerError("An unknown error occurred"),
+    });
   };
 
   return (
@@ -59,7 +62,7 @@ const Login = () => {
             {...register("email", {
               required: "Email is required",
               pattern: {
-                value: PASSWORD_REGEX,
+                value: EMAIL_REGEX,
                 message: "Enter a valid email",
               },
             })}

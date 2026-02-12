@@ -1,4 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
+import { loginApi } from "../../services/api";
 
 const BASE_URL = "http://localhost:3001";
 
@@ -43,4 +44,11 @@ const registerUser = async (payload: RegisterPayload): Promise<User> => {
   });
   if (!res.ok) throw new Error("Failed to register");
   return res.json();
+};
+
+export const useLoginMutation = () => {
+  return useMutation({
+    mutationFn: loginApi,
+    retry: false,
+  });
 };

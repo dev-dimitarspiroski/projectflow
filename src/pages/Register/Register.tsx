@@ -5,7 +5,7 @@ import Input from "../../components/ui/Input/Input";
 import styles from "../Login/Login.module.css";
 import { useRegisterMutation } from "../../features/auth/auth.mutations";
 import { useState } from "react";
-import { PASSWORD_REGEX } from "../../consts/regex.const";
+import { EMAIL_REGEX } from "../../consts/regex.const";
 
 type RegisterForm = {
   email: string;
@@ -70,7 +70,7 @@ const Register = () => {
             {...register("email", {
               required: "Email is required",
               pattern: {
-                value: PASSWORD_REGEX,
+                value: EMAIL_REGEX,
                 message: "Enter a valid email",
               },
             })}

@@ -10,7 +10,14 @@ export const useProjectsQuery = () => {
   });
 };
 
-export const useTasksQuery = (projectId: number | null) => {
+export const useAllTasksQuery = () => {
+  return useQuery<Task[]>({
+    queryKey: ["tasks"],
+    queryFn: () => apiFetch(Endpoints.tasks),
+  });
+};
+
+export const useTasksPerProjectQuery = (projectId: number | null) => {
   return useQuery<Task[]>({
     queryKey: ["tasks", projectId],
     queryFn: () => apiFetch(`${Endpoints.tasks}?projectId=${projectId}`),

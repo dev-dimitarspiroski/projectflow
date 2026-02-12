@@ -1,3 +1,4 @@
+import { classCombiner } from "../../../utility/classCombiner";
 import styles from "./Badge.module.css";
 
 type Variant = "todo" | "in_progress" | "done" | "default";
@@ -7,9 +8,6 @@ type Props = {
   variant?: Variant;
   className?: string;
 };
-
-const cx = (...classes: Array<string | undefined | false>) =>
-  classes.filter(Boolean).join(" ");
 
 const Badge = ({ children, variant = "default", className }: Props) => {
   const variantClass =
@@ -22,7 +20,7 @@ const Badge = ({ children, variant = "default", className }: Props) => {
           : styles.default;
 
   return (
-    <span className={cx(styles.badge, variantClass, className)}>
+    <span className={classCombiner(styles.badge, variantClass, className)}>
       {children}
     </span>
   );
