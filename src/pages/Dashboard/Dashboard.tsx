@@ -70,6 +70,20 @@ const Dashboard = () => {
         </div>
       </div>
 
+      <div className={styles.progressCard}>
+        <div className={styles.progressTop}>
+          <p className={styles.progressTitle}>Completion</p>
+          <p className={styles.progressValue}>{stats.completionRate}%</p>
+        </div>
+
+        <div className={styles.track}>
+          <div
+            className={styles.fill}
+            style={{ width: `${stats.completionRate}%` }}
+          />
+        </div>
+      </div>
+
       <div className={styles.section}>
         <h2>Recent Tasks</h2>
         <ul className={styles.taskList}>

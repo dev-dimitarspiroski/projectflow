@@ -57,3 +57,48 @@
   border-radius: var(--radius-sm);
   padding: 10px 12px;
 }
+
+.progressCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-sm);
+
+  .progressTop {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+
+    .progressTitle {
+      margin: 0;
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .progressValue {
+      margin: 0;
+      font-size: 13px;
+      color: var(--muted);
+    }
+  }
+
+  .track {
+    height: 10px;
+    border-radius: var(--radius-sm);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    overflow: hidden;
+
+    .fill {
+      height: 100%;
+      border-radius: var(--radius-sm);
+      width: 0%;
+      background: linear-gradient(90deg, var(--primary), var(--primary-hover));
+      transition: width 220ms ease;
+    }
+  }
+}
