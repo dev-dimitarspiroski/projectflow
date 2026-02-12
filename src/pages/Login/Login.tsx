@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { useForm } from "react-hook-form";
@@ -15,7 +15,7 @@ type LoginForm = {
 
 const Login = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, state } = useAuth();
   const loginMutation = useLoginMutation();
   const [serverError, setServerError] = useState<string | null>(null);
   const {
@@ -30,12 +30,18 @@ const Login = () => {
     mode: "onSubmit",
   });
 
+  useEffect(() => {
+    if (state.isAuthenticated) {
+      navigate("/dashboard");
+    }
+  }, [state.isAuthenticated, navigate]);
+
   const onFormSubmit = async (data: LoginForm): Promise<void> => {
     setServerError(null);
 
     loginMutation.mutate(data, {
       onSuccess: (user) => {
-        login({ email: user.email, password: user.password });
+        login(user);
         navigate("/dashboard");
       },
       onError: (error) =>

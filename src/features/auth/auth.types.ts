@@ -16,6 +16,6 @@ export interface AuthState {
 
 export interface AuthContextValue {
   state: AuthState;
-  login: (credentials: UserLogin) => void;
+  login: (user: User) => void;
   logout: () => void;
 }
