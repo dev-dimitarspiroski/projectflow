@@ -55,6 +55,11 @@ const Dashboard = () => {
         </div>
 
         <div className={styles.card}>
+          <h3>To Do</h3>
+          <p className={styles.big}>{stats.todo}</p>
+        </div>
+
+        <div className={styles.card}>
           <h3>In Progress</h3>
           <p className={styles.big}>{stats.inProgress}</p>
         </div>
