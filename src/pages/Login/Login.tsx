@@ -1,52 +1,91 @@
-import { useRef, useState, SubmitEvent } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
+import { useForm } from "react-hook-form";
 import Button from "../../components/ui/Button/Button";
 import Input from "../../components/ui/Input/Input";
+import styles from "./Login.module.css";
+import { PASSWORD_REGEX } from "../../consts/regex.const";
+
+type LoginForm = {
+  email: string;
+  password: string;
+};
 
 const Login = () => {
-  const emailRef = useRef<HTMLInputElement>(null);
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const navigate = useNavigate();
   const { login } = useAuth();
+  const [serverError, setServerError] = useState<string | null>(null);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginForm>({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+    mode: "onSubmit",
+  });
 
-  const handleSubmit = async (
-    event: SubmitEvent<HTMLFormElement>,
-  ): Promise<void> => {
-    event.preventDefault();
-    setError("");
-
-    const email = emailRef.current?.value || "";
+  const onFormSubmit = async (data: LoginForm): Promise<void> => {
+    setServerError("");
 
     try {
-      await login({ email, password });
+      await login({ email: data.email, password: data.password });
       navigate("/");
     } catch (err) {
-      setError("Invalid email or password.");
+      setServerError(
+        "Failed to login. Please check your credentials and try again.",
+      );
       console.error(err);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h1>Login</h1>
+    <div className={styles.page}>
+      <form className={styles.card} onSubmit={handleSubmit(onFormSubmit)}>
+        <div className={styles.header}>
+          <h1 className={styles.title}>Login</h1>
+          <p className={styles.subtitle}>Welcome back — sign in to continue.</p>
+        </div>
 
-      <Input ref={emailRef} type="email" placeholder="Email" required />
-      <Input
-        type="password"
-        placeholder="Password"
-        required
-        value={password}
-        onChange={(event) => setPassword(event.target.value)}
-      />
+        <div className={styles.form}>
+          <Input
+            label="Email"
+            type="email"
+            placeholder="you@example.com"
+            autoFocus
+            {...register("email", {
+              required: "Email is required",
+              pattern: {
+                value: PASSWORD_REGEX,
+                message: "Enter a valid email",
+              },
+            })}
+            error={errors.email?.message}
+          />
+          <Input
+            label="Password"
+            type="password"
+            placeholder="Password"
+            {...register("password", {
+              required: "Password is required",
+              minLength: { value: 6, message: "Minimum 6 characters" },
+            })}
+            error={errors.password?.message}
+          />
 
-      {error && <p>{error}</p>}
+          {serverError && <div className={styles.errorBox}>{serverError}</div>}
 
-      <Button variant="primary" type="submit">
-        Login
-      </Button>
-    </form>
+          <div className={styles.actions}>
+            <Button variant="primary" type="submit" isLoading={isSubmitting}>
+              Login
+            </Button>
+          </div>
+        </div>
+      </form>
+    </div>
   );
 };
 

@@ -12,12 +12,15 @@ const Input = forwardRef<HTMLInputElement, Props>(
     const inputId = id ?? rest.name;
 
     return (
-      <label className={form.field} htmlFor={inputId}>
-        <span className={form.label}>{label}</span>
+      <div className={form.formGroup}>
+        <label className={form.label} htmlFor={inputId}>
+          <span>{label}</span>
+        </label>
 
         <input
           ref={ref}
           id={inputId}
+          autoComplete="off"
           className={classCombiner(form.input, className)}
           aria-invalid={!!error}
           aria-describedby={error ? `${inputId}-error` : undefined}
@@ -29,7 +32,7 @@ const Input = forwardRef<HTMLInputElement, Props>(
             {error}
           </p>
         )}
-      </label>
+      </div>
     );
   },
 );
