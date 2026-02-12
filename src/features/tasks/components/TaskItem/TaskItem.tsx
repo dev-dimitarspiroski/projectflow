@@ -8,7 +8,6 @@ import { useUpdateTaskMutation } from "../../task.mutations";
 interface Props {
   task: Task;
   selectedProjectId: number | null;
-  onSelect: (task: Task) => void;
   onEdit: (task: Task) => void;
 }
 

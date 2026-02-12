@@ -21,10 +21,8 @@ export const useCreateTaskMutation = () => {
         }),
       });
     },
-    onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({
-        queryKey: ["tasks", variables.projectId],
-      });
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
     },
   });
 };
@@ -52,43 +50,8 @@ export const useUpdateTaskMutation = () => {
       return res.json();
     },
 
-    onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({
-        queryKey: ["tasks", variables.projectId],
-      });
-    },
-  });
-};
-
-export const useToggleTaskMutation = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async (data: {
-      id: number;
-      projectId: number;
-
-      status: TaskStatus;
-    }) => {
-      const res = await fetch(`${BASE_URL}${Endpoints.tasks}/${data.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          status: data.status,
-        }),
-      });
-
-      if (!res.ok) {
-        throw new Error("Failed to toggle task");
-      }
-
-      return res.json();
-    },
-
-    onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({
-        queryKey: ["tasks", variables.projectId],
-      });
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
     },
   });
 };

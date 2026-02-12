@@ -4,7 +4,6 @@ import {
   useTasksPerProjectQuery,
 } from "../../features/projects/queries";
 import ProjectItem from "../../features/projects/components/ProjectItem/ProjectItem";
-import { useToggleTaskMutation } from "../../features/tasks/task.mutations";
 import Modal from "../../components/ui/Modal/Modal";
 import { Task } from "../../interfaces/api.interface";
 import EditTaskForm from "../../features/tasks/components/EditTaskForm/EditTaskForm";
@@ -24,7 +23,6 @@ const Projects = () => {
   const { data: projects, isLoading: projectsLoading } = useProjectsQuery();
   const { data: tasks, isLoading: tasksLoading } =
     useTasksPerProjectQuery(selectedProjectId);
-  const { mutate: toggleTask } = useToggleTaskMutation();
 
   const handleSelectProject = useCallback((id: number) => {
     setSelectedProjectId(id);
@@ -99,13 +97,6 @@ const Projects = () => {
                     task={task}
                     selectedProjectId={selectedProjectId}
                     onEdit={() => handleEditTask(task)}
-                    onSelect={() =>
-                      toggleTask({
-                        id: task.id,
-                        projectId: selectedProjectId,
-                        status: task.status,
-                      })
-                    }
                   />
                 ))}
               </ul>
