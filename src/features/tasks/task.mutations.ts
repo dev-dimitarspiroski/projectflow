@@ -11,8 +11,8 @@ export const useCreateTaskMutation = () => {
       title: string;
       status: TaskStatus;
       projectId: number;
-      ownerId: string | null;
-      createdBy: string | null;
+      ownerId: string;
+      createdBy: string;
     }) => {
       return await fetch(`${BASE_URL}${Endpoints.tasks}`, {
         method: "POST",

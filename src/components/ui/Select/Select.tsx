@@ -13,7 +13,7 @@ type Props = React.SelectHTMLAttributes<HTMLSelectElement> & {
 };
 
 const Select = forwardRef<HTMLSelectElement, Props>(
-  ({ label, error, options, className, id, placeholder, ...rest }, ref) => {
+  ({ label, error, options, className, id, ...rest }, ref) => {
     return (
       <label className={styles.field} htmlFor={id}>
         <span className={styles.label}>{label}</span>
@@ -22,15 +22,9 @@ const Select = forwardRef<HTMLSelectElement, Props>(
           id={id ?? rest.name}
           ref={ref}
           className={classCombiner(styles.select, className)}
-          required={rest.required}
           {...rest}
         >
-          {placeholder && (
-            <option value="" disabled hidden>
-              {placeholder}
-            </option>
-          )}
-
+          {<option value="unassigned">{"Unassigned"}</option>}
           {options.map((opt, index) => (
             <option key={opt.value + index} value={opt.value}>
               {opt.label}

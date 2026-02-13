@@ -3,12 +3,14 @@
     {
       "id": "1d77",
       "email": "admin@projectflow.dev",
-      "password": "123456"
+      "password": "123456",
+      "avatarSrc": null
     },
     {
       "id": "5d77",
       "email": "dimitar@projectflow.dev",
-      "password": "123123"
+      "password": "123123",
+      "avatarSrc": "https://github.com/shadcn.png"
     }
   ],
   "projects": [
@@ -41,7 +43,7 @@
       "projectId": 2,
       "title": "Remove legacy code",
       "status": "done",
-      "ownerId": "5d77"
+      "ownerId": "1d77"
     },
     {
       "id": "3191",
@@ -69,11 +71,19 @@
       "title": "Create dashboard",
       "status": "done",
       "projectId": "1",
-      "ownerId": "1d77"
+      "ownerId": "5d77"
     },
     {
       "id": "3e1c",
       "title": "Fix owner select first render",
+      "status": "done",
+      "projectId": "1",
+      "ownerId": "5d77",
+      "createdBy": "5d77"
+    },
+    {
+      "id": "85fa",
+      "title": "Improve the Task Item",
       "status": "done",
       "projectId": "1",
       "ownerId": "5d77",

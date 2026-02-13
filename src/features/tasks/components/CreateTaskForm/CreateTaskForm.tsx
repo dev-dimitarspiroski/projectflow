@@ -22,7 +22,7 @@ interface Props {
 
 const CreateTaskForm = ({ projectId, onSuccess }: Props) => {
   const { state } = useAuth();
-  const loggedInUser = state.user?.id ?? null;
+  const loggedInUser = state.user?.id ?? "Unknown";
   const {
     register,
     handleSubmit,
@@ -40,7 +40,7 @@ const CreateTaskForm = ({ projectId, onSuccess }: Props) => {
         title: data.title,
         status: data.status,
         projectId,
-        ownerId: null,
+        ownerId: "unassigned",
         createdBy: loggedInUser,
       },
       {

@@ -4,6 +4,7 @@ export interface User {
   id: string;
   email: string;
   password: string;
+  avatarSrc: string | null;
 }
 
 export interface LoginPayload {
@@ -21,6 +22,6 @@ export interface Task {
   projectId: number;
   title: string;
   status: TaskStatus;
-  ownerId: string | null;
+  ownerId: string;
   createdBy: string;
 }

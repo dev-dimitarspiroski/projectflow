@@ -36,7 +36,7 @@ const EditTaskForm = ({ task, selectedProjectId, onSuccess }: Props) => {
     defaultValues: {
       title: task.title,
       status: task.status ?? "todo",
-      ownerId: task.ownerId ?? "",
+      ownerId: task.ownerId,
     },
   });
 
@@ -44,7 +44,7 @@ const EditTaskForm = ({ task, selectedProjectId, onSuccess }: Props) => {
     reset({
       title: task.title,
       status: task.status ?? "todo",
-      ownerId: task.ownerId ? String(task.ownerId) : "",
+      ownerId: task.ownerId,
     });
   }, [task.id, task.title, task.status, task.ownerId, reset]);
 
@@ -101,7 +101,6 @@ const EditTaskForm = ({ task, selectedProjectId, onSuccess }: Props) => {
             <Select
               id={`owner-select-${task.id}`}
               label="Owner"
-              placeholder="Please select an owner..."
               options={userOptions}
               error={errors.ownerId?.message}
               value={field.value ?? ""}
