@@ -1,7 +1,7 @@
 import styles from "./EditTaskForm.module.css";
 import formStyles from "../../../../styles/form.module.css";
 import Button from "../../../../components/ui/Button/Button";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { Task } from "../../../../interfaces/api.interface";
 import { useEffect } from "react";
 import { useUpdateTaskMutation } from "../../task.mutations";
@@ -9,10 +9,12 @@ import Input from "../../../../components/ui/Input/Input";
 import { TaskStatus } from "../../task.types";
 import Select from "../../../../components/ui/Select/Select";
 import { STATUS_OPTIONS } from "../../../../consts/status.const";
+import { useUsersQuery } from "../../../users/users.queries";
 
 type FormValues = {
   title: string;
   status: TaskStatus;
+  ownerId: string;
 };
 
 type Props = {
@@ -22,8 +24,11 @@ type Props = {
 };
 
 const EditTaskForm = ({ task, selectedProjectId, onSuccess }: Props) => {
+  const { data: users = [] } = useUsersQuery();
+
   const {
     register,
+    control,
     handleSubmit,
     reset,
     formState: { errors },
@@ -31,6 +36,7 @@ const EditTaskForm = ({ task, selectedProjectId, onSuccess }: Props) => {
     defaultValues: {
       title: task.title,
       status: task.status ?? "todo",
+      ownerId: task.ownerId ?? "",
     },
   });
 
@@ -38,8 +44,14 @@ const EditTaskForm = ({ task, selectedProjectId, onSuccess }: Props) => {
     reset({
       title: task.title,
       status: task.status ?? "todo",
+      ownerId: task.ownerId ? String(task.ownerId) : "",
     });
-  }, [task.id, task.title, task.status, reset]);
+  }, [task.id, task.title, task.status, task.ownerId, reset]);
+
+  const userOptions = users.map((user) => ({
+    value: user.id,
+    label: user.email,
+  }));
 
   const updateTask = useUpdateTaskMutation();
 
@@ -50,6 +62,7 @@ const EditTaskForm = ({ task, selectedProjectId, onSuccess }: Props) => {
         projectId: selectedProjectId,
         title: data.title,
         status: data.status,
+        ownerId: data.ownerId,
       },
       {
         onSuccess: () => onSuccess(),
@@ -69,11 +82,35 @@ const EditTaskForm = ({ task, selectedProjectId, onSuccess }: Props) => {
           error={errors.title?.message}
         />
       </div>
-      <div className={`${formStyles.formGroup} ${formStyles.formGroup}`}>
+
+      <div className={formStyles.formGroup}>
         <Select
+          id={`status-select-${task.id}`}
           label="Status"
           options={[...STATUS_OPTIONS]}
           {...register("status")}
+        />
+      </div>
+
+      <div className={formStyles.formGroup}>
+        <Controller
+          name="ownerId"
+          control={control}
+          rules={{ required: "Owner is required" }}
+          render={({ field }) => (
+            <Select
+              id={`owner-select-${task.id}`}
+              label="Owner"
+              placeholder="Please select an owner..."
+              options={userOptions}
+              error={errors.ownerId?.message}
+              value={field.value ?? ""}
+              onChange={field.onChange}
+              onBlur={field.onBlur}
+              name={field.name}
+              ref={field.ref}
+            />
+          )}
         />
       </div>
 
@@ -86,7 +123,6 @@ const EditTaskForm = ({ task, selectedProjectId, onSuccess }: Props) => {
           variant="ghost"
           type="button"
           onClick={onSuccess}
-          isLoading={updateTask.isPending}
           disabled={updateTask.isPending}
         >
           Cancel

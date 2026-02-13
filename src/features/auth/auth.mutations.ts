@@ -9,7 +9,7 @@ type RegisterPayload = {
 };
 
 type User = {
-  id: number;
+  id: string;
   email: string;
   password: string;
 };

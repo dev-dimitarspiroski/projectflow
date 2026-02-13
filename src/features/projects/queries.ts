@@ -17,10 +17,29 @@ export const useAllTasksQuery = () => {
   });
 };
 
+export const useOwnedTasksQuery = (ownerId: string) => {
+  return useQuery<Task[]>({
+    queryKey: ["tasks", ownerId],
+    queryFn: () => apiFetch(`${Endpoints.tasks}?ownerId=${ownerId}`),
+  });
+};
+
 export const useTasksPerProjectQuery = (projectId: number | null) => {
   return useQuery<Task[]>({
     queryKey: ["tasks", projectId],
     queryFn: () => apiFetch(`${Endpoints.tasks}?projectId=${projectId}`),
     enabled: !!projectId,
+  });
+};
+
+export const useOwnedTasksPerProjectQuery = (
+  projectId: number | null,
+  ownerId: string | null,
+) => {
+  return useQuery<Task[]>({
+    queryKey: ["tasks", projectId, ownerId],
+    queryFn: () =>
+      apiFetch(`${Endpoints.tasks}?projectId=${projectId}&ownerId=${ownerId}`),
+    enabled: !!projectId && !!ownerId,
   });
 };

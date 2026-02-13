@@ -1,7 +1,7 @@
 import { TaskStatus } from "../features/tasks/task.types";
 
 export interface User {
-  id: number;
+  id: string;
   email: string;
   password: string;
 }
@@ -17,8 +17,10 @@ export interface Project {
 }
 
 export interface Task {
-  id: number;
+  id: string;
   projectId: number;
   title: string;
   status: TaskStatus;
+  ownerId: string | null;
+  createdBy: string;
 }

@@ -4,13 +4,20 @@ import { classCombiner } from "../../utility/classCombiner";
 import styles from "./StatusSelectBadge.module.css";
 
 type Props = {
+  id: string;
   value: TaskStatus;
   onChange: (next: TaskStatus) => void;
   disabled?: boolean;
   className?: string;
 };
 
-const StatusSelectBadge = ({ value, onChange, disabled, className }: Props) => {
+const StatusSelectBadge = ({
+  id,
+  value,
+  onChange,
+  disabled,
+  className,
+}: Props) => {
   const variantClass =
     value === "in_progress"
       ? styles.inProgress
@@ -21,6 +28,7 @@ const StatusSelectBadge = ({ value, onChange, disabled, className }: Props) => {
   return (
     <span className={styles.wrapper}>
       <select
+        id={id}
         className={classCombiner(styles.select, variantClass, className)}
         value={value}
         disabled={disabled}

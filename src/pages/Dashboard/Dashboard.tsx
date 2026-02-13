@@ -1,15 +1,18 @@
 import { useMemo } from "react";
 import {
-  useAllTasksQuery,
+  useOwnedTasksQuery,
   useProjectsQuery,
 } from "../../features/projects/queries";
 import Badge from "../../components/ui/Badge/Badge";
 import styles from "./Dashboard.module.css";
 import { getBadgeLabel } from "../../utility/badge";
+import { useAuth } from "../../hooks/useAuth";
 
 const Dashboard = () => {
+  const { state } = useAuth();
+  const ownerId = state.user?.id ?? null;
   const { data: projects = [] } = useProjectsQuery();
-  const { data: tasks = [] } = useAllTasksQuery();
+  const { data: tasks = [] } = useOwnedTasksQuery(ownerId!);
 
   const stats = useMemo(() => {
     const totalProjects = projects.length;

@@ -11,6 +11,8 @@ export const useCreateTaskMutation = () => {
       title: string;
       status: TaskStatus;
       projectId: number;
+      ownerId: string | null;
+      createdBy: string | null;
     }) => {
       return await fetch(`${BASE_URL}${Endpoints.tasks}`, {
         method: "POST",
@@ -32,10 +34,11 @@ export const useUpdateTaskMutation = () => {
 
   return useMutation({
     mutationFn: async (data: {
-      id: number;
+      id: string;
       projectId: number;
       title: string;
       status: TaskStatus;
+      ownerId?: string | null;
     }) => {
       const res = await fetch(`${BASE_URL}/tasks/${data.id}`, {
         method: "PATCH",
@@ -43,6 +46,7 @@ export const useUpdateTaskMutation = () => {
         body: JSON.stringify({
           title: data.title,
           status: data.status,
+          ownerId: data.ownerId,
         }),
       });
 

@@ -6,10 +6,13 @@ import Input from "../../../../components/ui/Input/Input";
 import { TaskStatus } from "../../task.types";
 import Select from "../../../../components/ui/Select/Select";
 import { STATUS_OPTIONS } from "../../../../consts/status.const";
+import { useAuth } from "../../../../hooks/useAuth";
 
 interface CreateTaskFormValues {
   title: string;
   status: TaskStatus;
+  ownerId: string | null;
+  createdBy: string | null;
 }
 
 interface Props {
@@ -18,6 +21,8 @@ interface Props {
 }
 
 const CreateTaskForm = ({ projectId, onSuccess }: Props) => {
+  const { state } = useAuth();
+  const loggedInUser = state.user?.id ?? null;
   const {
     register,
     handleSubmit,
@@ -31,7 +36,13 @@ const CreateTaskForm = ({ projectId, onSuccess }: Props) => {
 
   const onSubmitForm = async (data: CreateTaskFormValues) => {
     createTask.mutate(
-      { title: data.title, status: data.status, projectId },
+      {
+        title: data.title,
+        status: data.status,
+        projectId,
+        ownerId: null,
+        createdBy: loggedInUser,
+      },
       {
         onSuccess: () => {
           reset();

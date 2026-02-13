@@ -27,6 +27,7 @@ const TaskItem = React.memo(({ task, selectedProjectId, onEdit }: Props) => {
     <li key={task.id}>
       <span>{task.title}</span>
       <StatusSelectBadge
+        id={`status-select-${task.id}`}
         value={task.status}
         disabled={updateTask.isPending}
         onChange={(newStatus) => handleStatusChange(task, newStatus)}

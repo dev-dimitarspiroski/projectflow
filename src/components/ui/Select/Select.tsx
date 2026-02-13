@@ -7,35 +7,39 @@ type Option = { value: string; label: string };
 
 type Props = React.SelectHTMLAttributes<HTMLSelectElement> & {
   options: Option[];
+  placeholder?: string;
   label?: string;
   error?: string;
 };
 
 const Select = forwardRef<HTMLSelectElement, Props>(
-  ({ label, error, options, className, id, ...rest }, ref) => {
-    const selectId = id ?? rest.name;
-
+  ({ label, error, options, className, id, placeholder, ...rest }, ref) => {
     return (
-      <label className={styles.field} htmlFor={selectId}>
+      <label className={styles.field} htmlFor={id}>
         <span className={styles.label}>{label}</span>
 
         <select
+          id={id ?? rest.name}
           ref={ref}
-          id={selectId}
           className={classCombiner(styles.select, className)}
-          aria-invalid={!!error}
-          aria-describedby={error ? `${selectId}-error` : undefined}
+          required={rest.required}
           {...rest}
         >
-          {options.map((opt) => (
-            <option key={opt.value} value={opt.value}>
+          {placeholder && (
+            <option value="" disabled hidden>
+              {placeholder}
+            </option>
+          )}
+
+          {options.map((opt, index) => (
+            <option key={opt.value + index} value={opt.value}>
               {opt.label}
             </option>
           ))}
         </select>
 
         {error && (
-          <p className={styles.error} id={`${selectId}-error`}>
+          <p className={styles.error} id={`${id}-error`}>
             {error}
           </p>
         )}
