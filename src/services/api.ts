@@ -30,5 +30,10 @@ export const loginApi = async ({
     throw new Error("Invalid credentials");
   }
 
-  return { id: user.id, email: user.email, password: user.password };
+  return {
+    id: user.id,
+    email: user.email,
+    password: user.password,
+    avatarSrc: user.avatarSrc,
+  };
 };
