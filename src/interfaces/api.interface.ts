@@ -24,4 +24,5 @@ export interface Task {
   status: TaskStatus;
   ownerId: string;
   createdBy: string;
+  order?: number;
 }

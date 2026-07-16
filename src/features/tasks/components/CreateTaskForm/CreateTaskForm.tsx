@@ -1,9 +1,12 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { useCreateTaskMutation } from "../../task.mutations";
+import { Endpoints } from "../../../../enums/endpoints.enum";
+import { BASE_URL } from "../../../../consts/api.const";
 import Button from "../../../../components/ui/Button/Button";
 import Input from "../../../../components/ui/Input/Input";
 import { TaskStatus } from "../../task.types";
+import type { Task } from "../../../../interfaces/api.interface";
 import Select from "../../../../components/ui/Select/Select";
 import { STATUS_OPTIONS } from "../../../../consts/status.const";
 import { useAuth } from "../../../../hooks/useAuth";
@@ -35,25 +38,38 @@ const CreateTaskForm = ({ projectId, onSuccess }: Props) => {
   const createTask = useCreateTaskMutation();
 
   const onSubmitForm = async (data: CreateTaskFormValues) => {
-    createTask.mutate(
-      {
-        title: data.title,
-        status: data.status,
-        projectId,
-        ownerId: "unassigned",
-        createdBy: loggedInUser,
-      },
-      {
-        onSuccess: () => {
-          reset();
+    try {
+      const res = await fetch(
+        `${BASE_URL}${Endpoints.tasks}?projectId=${projectId}&_sort=-order&_limit=1`,
+      );
+      if (!res.ok) throw new Error("Failed to fetch last task");
+      const lastTasks = (await res.json()) as Task[];
+      const maxOrder = lastTasks.length > 0 ? (lastTasks[0].order ?? -1) : -1;
+      const newOrder = maxOrder + 1;
 
-          if (onSuccess) {
-            onSuccess();
-          }
+      createTask.mutate(
+        {
+          title: data.title,
+          status: data.status,
+          projectId,
+          ownerId: "unassigned",
+          createdBy: loggedInUser,
+          order: newOrder,
         },
-        onError: () => setError("Failed to create task."),
-      },
-    );
+        {
+          onSuccess: () => {
+            reset();
+
+            if (onSuccess) {
+              onSuccess();
+            }
+          },
+          onError: () => setError("Failed to create task."),
+        },
+      );
+    } catch {
+      setError("Failed to determine task order.");
+    }
   };
 
   return (
@@ -73,8 +89,8 @@ const CreateTaskForm = ({ projectId, onSuccess }: Props) => {
       <Button
         variant="primary"
         type="submit"
-        isLoading={createTask.isPending}
-        disabled={createTask.isPending}
+        isLoading={createTask.status === "pending"}
+        disabled={createTask.status === "pending"}
       >
         Add
       </Button>

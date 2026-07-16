@@ -1,4 +1,8 @@
 import React, { useCallback, useMemo } from "react";
+import type {
+  DraggableAttributes,
+  DraggableSyntheticListeners,
+} from "@dnd-kit/core";
 import Button from "../../../../components/ui/Button/Button";
 import { Task } from "../../../../interfaces/api.interface";
 import { TaskStatus } from "../../task.types";
@@ -12,9 +16,23 @@ interface Props {
   task: Task;
   selectedProjectId: number | null;
   onEdit: (task: Task) => void;
+  // optional drag-and-drop props
+  dragAttributes?: DraggableAttributes;
+  dragListeners?: DraggableSyntheticListeners;
+  style?: React.CSSProperties;
 }
 
-const TaskItem = React.memo(({ task, selectedProjectId, onEdit }: Props) => {
+const TaskItemInner = (
+  {
+    task,
+    selectedProjectId,
+    onEdit,
+    dragAttributes,
+    dragListeners,
+    style,
+  }: Props,
+  ref: React.ForwardedRef<HTMLLIElement>,
+) => {
   const updateTask = useUpdateTaskMutation();
   const { data: users = [] } = useUsersQuery();
 
@@ -40,9 +58,15 @@ const TaskItem = React.memo(({ task, selectedProjectId, onEdit }: Props) => {
     [selectedProjectId, task, updateTask],
   );
 
+  const isMutating = updateTask.status === "pending";
+
   return (
     <li
-      className={`${styles.row} ${updateTask.isPending ? styles.pending : ""}`}
+      ref={ref}
+      className={`${styles.row} ${isMutating ? styles.pending : ""}`}
+      {...dragAttributes}
+      {...dragListeners}
+      style={style}
     >
       <div className={styles.left}>
         <div className={styles.titleRow}>
@@ -74,7 +98,7 @@ const TaskItem = React.memo(({ task, selectedProjectId, onEdit }: Props) => {
         <StatusSelectBadge
           id={`status-select-${task.id}`}
           value={task.status}
-          disabled={updateTask.isPending}
+          disabled={isMutating}
           onChange={handleStatusChange}
         />
 
@@ -83,13 +107,15 @@ const TaskItem = React.memo(({ task, selectedProjectId, onEdit }: Props) => {
           size="sm"
           type="button"
           onClick={() => onEdit(task)}
-          disabled={updateTask.isPending}
+          disabled={isMutating}
         >
           Edit
         </Button>
       </div>
     </li>
   );
-});
+};
+
+const TaskItem = React.memo(React.forwardRef(TaskItemInner));
 
 export default TaskItem;

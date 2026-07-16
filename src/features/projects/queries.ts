@@ -13,21 +13,30 @@ export const useProjectsQuery = () => {
 export const useAllTasksQuery = () => {
   return useQuery<Task[]>({
     queryKey: ["tasks"],
-    queryFn: () => apiFetch(Endpoints.tasks),
+    queryFn: () => apiFetch(`${Endpoints.tasks}?_sort=order&_order=asc`),
   });
 };
 
 export const useOwnedTasksQuery = (ownerId: string) => {
   return useQuery<Task[]>({
     queryKey: ["tasks", ownerId],
-    queryFn: () => apiFetch(`${Endpoints.tasks}?ownerId=${ownerId}`),
+    queryFn: () =>
+      apiFetch(`${Endpoints.tasks}?ownerId=${ownerId}&_sort=-order`),
   });
 };
 
 export const useTasksPerProjectQuery = (projectId: number | null) => {
   return useQuery<Task[]>({
     queryKey: ["tasks", projectId],
-    queryFn: () => apiFetch(`${Endpoints.tasks}?projectId=${projectId}`),
+    queryFn: async () => {
+      const allTasks = await apiFetch<Task[]>(
+        `${Endpoints.tasks}?_sort=-order`,
+      );
+
+      return allTasks.filter(
+        (task) => String(task.projectId) === String(projectId),
+      );
+    },
     enabled: !!projectId,
   });
 };
@@ -38,8 +47,17 @@ export const useOwnedTasksPerProjectQuery = (
 ) => {
   return useQuery<Task[]>({
     queryKey: ["tasks", projectId, ownerId],
-    queryFn: () =>
-      apiFetch(`${Endpoints.tasks}?projectId=${projectId}&ownerId=${ownerId}`),
+    queryFn: async () => {
+      const allTasks = await apiFetch<Task[]>(
+        `${Endpoints.tasks}?_sort=-order`,
+      );
+
+      return allTasks.filter(
+        (task) =>
+          String(task.projectId) === String(projectId) &&
+          String(task.ownerId) === String(ownerId),
+      );
+    },
     enabled: !!projectId && !!ownerId,
   });
 };

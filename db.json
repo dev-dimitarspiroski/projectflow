@@ -28,6 +28,7 @@
       "id": "1",
       "projectId": 1,
       "title": "Setup Vite",
+      "order": 3,
       "status": "done",
       "ownerId": "5d77"
     },
@@ -35,6 +36,7 @@
       "id": "2",
       "projectId": 1,
       "title": "Auth Context",
+      "order": 1,
       "status": "done",
       "ownerId": "5d77"
     },
@@ -42,13 +44,15 @@
       "id": "3",
       "projectId": 2,
       "title": "Remove legacy code",
+      "order": 0,
       "status": "done",
       "ownerId": "1d77"
     },
     {
       "id": "3191",
       "title": "Status implementation",
-      "projectId": "1",
+      "projectId": 1,
+      "order": -1,
       "status": "done",
       "ownerId": "5d77"
     },
@@ -56,28 +60,32 @@
       "id": "7368",
       "title": "Finish login page",
       "status": "done",
-      "projectId": "1",
+      "projectId": 1,
+      "order": 3.75,
       "ownerId": "5d77"
     },
     {
       "id": "e86a",
       "title": "Finish register page",
       "status": "done",
-      "projectId": "1",
+      "projectId": 1,
+      "order": 3.5,
       "ownerId": "5d77"
     },
     {
       "id": "1470",
       "title": "Create dashboard",
       "status": "done",
-      "projectId": "1",
+      "projectId": 1,
+      "order": 4,
       "ownerId": "5d77"
     },
     {
       "id": "3e1c",
       "title": "Fix owner select first render",
       "status": "done",
-      "projectId": "1",
+      "projectId": 1,
+      "order": 3.625,
       "ownerId": "5d77",
       "createdBy": "5d77"
     },
@@ -85,7 +93,8 @@
       "id": "85fa",
       "title": "Improve the Task Item",
       "status": "done",
-      "projectId": "1",
+      "projectId": 1,
+      "order": 2,
       "ownerId": "5d77",
       "createdBy": "5d77"
     }

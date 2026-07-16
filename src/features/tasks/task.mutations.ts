@@ -13,12 +13,14 @@ export const useCreateTaskMutation = () => {
       projectId: number;
       ownerId: string;
       createdBy: string;
+      order?: number;
     }) => {
       return await fetch(`${BASE_URL}${Endpoints.tasks}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...data,
+          projectId: String(data.projectId),
           status: data.status ?? "todo",
         }),
       });
@@ -47,6 +49,7 @@ export const useUpdateTaskMutation = () => {
           title: data.title,
           status: data.status,
           ownerId: data.ownerId,
+          projectId: String(data.projectId),
         }),
       });
 
@@ -56,6 +59,42 @@ export const useUpdateTaskMutation = () => {
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
+    },
+  });
+};
+
+export const useReorderTaskMutation = (projectId: number | null) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (item: { id: string; order: number }) => {
+      const res = await fetch(`${BASE_URL}${Endpoints.tasks}/${item.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          order: item.order,
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to reorder task");
+      }
+
+      return res.json();
+    },
+
+    onSettled: () => {
+      if (projectId) {
+        queryClient.invalidateQueries({
+          queryKey: ["tasks", projectId],
+        });
+      }
+
+      queryClient.invalidateQueries({
+        queryKey: ["tasks"],
+      });
     },
   });
 };
